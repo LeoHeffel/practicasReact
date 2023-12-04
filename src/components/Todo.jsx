@@ -1,5 +1,5 @@
 import PropTypes from 'prop-types'
-const Todo =({todo})=>{
+const Todo =({todo,deleteTodo,updateTodo})=>{
     const {title,description, status, priority} = todo
     return (
         <li className="list-group-item ">
@@ -8,8 +8,8 @@ const Todo =({todo})=>{
                     <h5 className={`${status && "text-decoration-line-through"}`}>{title}</h5>
                     <p className={`${status && "text-decoration-line-through"}`}> {description}</p>
                     <div className="d-flex gap-2">
-                        <button className='btn btn-sm btn-danger'>Eliminar</button>
-                        <button className='btn btn-sm btn-warning'>Actualizar</button>
+                        <button className='btn btn-sm btn-danger' onClick={()=>deleteTodo(todo.id)}>Eliminar</button>
+                        <button className='btn btn-sm btn-warning' onClick={()=>updateTodo(todo.id)}>Actualizar</button>
                     </div>
                 </div>
                 {priority&& <span className='badge text-bg-primary l'> Prioritario</span>}
@@ -18,6 +18,8 @@ const Todo =({todo})=>{
     )
 }
 Todo.propTypes={
-    todo: PropTypes.object
+    todo: PropTypes.object,
+    deleteTodo: PropTypes.func,
+    updateTodo: PropTypes.func
 }
 export default Todo
