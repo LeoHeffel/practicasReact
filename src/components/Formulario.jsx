@@ -1,6 +1,7 @@
 import { useState } from "react"
-
-const Formulario = ()=>{
+import  PropTypes from 'prop-types'
+import Swal from 'sweetalert2'
+const Formulario = ({addTodo})=>{
 
     const [todo, setTodo]= useState({
         title: "",
@@ -8,11 +9,41 @@ const Formulario = ()=>{
         status: "pendiente",
         priority: false
     })
- 
+    
+    const {title, description, status, priority} = todo
 
     const handleSubmit=(e)=>{
         e.preventDefault()
+        if(!title.trim() || !description.trim() ){
+         return Swal.fire({
+                icon: "error",
+                title: "Oops...",
+                text: "Titulo y descripción son obligatorios!",
+              });
+        }
 
+        addTodo({
+            id: Date.now(),
+            ...todo,
+            status: status === "completado" ? true : false
+        }
+            
+        )
+        setTodo({
+            title: "",
+            description: "",
+            status: "pendiente",
+            priority: false
+        })
+        Swal.fire({
+            position: "center",
+            icon: "success",
+            title: "Todo agregado",
+            showConfirmButton: false,
+            timer: 1500
+            
+          });
+          
     }
 
     const handleChange =(e)=>{
@@ -23,7 +54,6 @@ const Formulario = ()=>{
         })
     }
 
-    const {title, description, status, priority} = todo
 
     return <form onSubmit={handleSubmit}  >
         <input 
@@ -62,8 +92,12 @@ const Formulario = ()=>{
         <button 
             type="submit" 
             className="btn btn-primary">
-                Procesar
+                Agregar Todo
         </button>
     </form>
 }
+Formulario.propTypes={
+    addTodo: PropTypes.func.isRequired
+}
+
 export default Formulario
